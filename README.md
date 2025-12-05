@@ -1,4 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="<img width="961" height="623" alt="image" src="https://github.com/user-attachments/assets/7e5787d0-37cd-4b80-844b-9a598e527102"/>
-" />
+<img width="947" height="625" alt="image" src="https://github.com/user-attachments/assets/499bdd20-4cee-4633-a774-440babf5fb2c" />
 </div>
+ 一个根据ai鼓捣的登录小界面
+
