@@ -35,7 +35,7 @@
       </g>
 
       <!-- --- 1. PURPLE BLOCK (Tall, Back Left) --- -->
-      <g class="mascot-purple" style="backface-visibility: hidden; transform-style: preserve-3d;">
+      <g :class="`mascot-purple ${isCelebrating ? 'celebrate-pop' : ''}`" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <g clip-path="url(#purple-clip)">
           <!-- Main Body -->
           <rect x="0" y="0" width="120" height="240" fill="#8B5CF6" />
@@ -84,7 +84,7 @@
       </g>
 
       <!-- --- 2. BLACK BLOCK (Middle, Raised) --- -->
-      <g class="mascot-black" style="backface-visibility: hidden; transform-style: preserve-3d;">
+      <g :class="`mascot-black ${isCelebrating ? 'celebrate-pop' : ''}`" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <rect x="0" y="0" width="100" height="150" rx="12" fill="#1F2937" />
         
         <g class="transition-opacity duration-300">
@@ -104,14 +104,16 @@
       </g>
 
       <!-- --- 3. YELLOW CYLINDER (Right) --- -->
-      <g class="mascot-yellow" style="backface-visibility: hidden; transform-style: preserve-3d;">
+      <g :class="`mascot-yellow ${isCelebrating ? 'celebrate-pop' : ''}`" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <g clip-path="url(#yellow-clip)">
           <path d="M 0 65 A 65 65 0 0 1 130 65 V 150 H 0 Z" fill="#FBBF24" />
           
           <!-- Face Group -->
           <g ref="yellowFaceRef" class="transition-transform duration-100 ease-out">
+            <!-- 眼睛 - 保持不变 -->
             <circle cx="40" cy="80" r="6" fill="#000" />
             <circle cx="90" cy="75" r="6" fill="#000" />
+            <!-- 嘴巴 - 保持不变 -->
             <path d="M 45 110 H 95" stroke="#000" stroke-width="5" stroke-linecap="round" />
           </g>
 
@@ -146,16 +148,34 @@
       </g>
 
       <!-- --- 4. ORANGE SEMICIRCLE (Front Center) --- -->
-      <g class="mascot-orange" style="backface-visibility: hidden; transform-style: preserve-3d;">
+      <g :class="`mascot-orange ${isCelebrating ? 'celebrate-pop' : ''}`" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <g clip-path="url(#orange-clip)">
           <!-- Main Body -->
           <path d="M 0 130 A 130 130 0 0 1 260 130 Z" fill="#F97316" />
           
           <!-- Face Group -->
           <g ref="orangeFaceRef" class="transition-transform duration-100 ease-out">
+            <!-- 眼睛 - 保持不变 -->
             <circle cx="100" cy="75" r="7" fill="#000" />
             <circle cx="160" cy="75" r="7" fill="#000" />
-            <path d="M 115 100 Q 130 115 145 100" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round" />
+            <!-- 嘴巴 - 惊呼时直接变成O形，无动画 -->
+            <path 
+              v-if="!isCelebrating"
+              d="M 115 100 Q 130 115 145 100" 
+              fill="none" 
+              stroke="#000" 
+              stroke-width="5" 
+              stroke-linecap="round" 
+            />
+            <!-- 惊呼：更圆润、稍大的O形嘴巴 -->
+            <ellipse 
+              v-if="isCelebrating"
+              cx="130" 
+              cy="100" 
+              rx="9" 
+              ry="11" 
+              fill="#000" 
+            />
           </g>
 
           <!-- HANDS (Vertical Slide Up + Tilt) -->
@@ -352,6 +372,51 @@ onUnmounted(() => {
 .mascot-orange {
   transform: translate3d(20px, 150px, 0);
   will-change: transform;
+}
+
+/* 登录成功欢呼效果 - 人物上下轻微跳动，像在庆祝 */
+@keyframes celebrate-cheer-purple {
+  0%, 100% { transform: translate3d(70px, 30px, 0); }
+  25% { transform: translate3d(70px, 20px, 0); }
+  50% { transform: translate3d(70px, 25px, 0); }
+  75% { transform: translate3d(70px, 22px, 0); }
+}
+
+@keyframes celebrate-cheer-black {
+  0%, 100% { transform: translate3d(160px, 80px, 0); }
+  25% { transform: translate3d(160px, 70px, 0); }
+  50% { transform: translate3d(160px, 75px, 0); }
+  75% { transform: translate3d(160px, 72px, 0); }
+}
+
+@keyframes celebrate-cheer-yellow {
+  0%, 100% { transform: translate3d(250px, 130px, 0); }
+  25% { transform: translate3d(250px, 120px, 0); }
+  50% { transform: translate3d(250px, 125px, 0); }
+  75% { transform: translate3d(250px, 122px, 0); }
+}
+
+@keyframes celebrate-cheer-orange {
+  0%, 100% { transform: translate3d(20px, 150px, 0); }
+  25% { transform: translate3d(20px, 140px, 0); }
+  50% { transform: translate3d(20px, 145px, 0); }
+  75% { transform: translate3d(20px, 142px, 0); }
+}
+
+.mascot-purple.celebrate-pop {
+  animation: celebrate-cheer-purple 0.6s ease-in-out infinite;
+}
+
+.mascot-black.celebrate-pop {
+  animation: celebrate-cheer-black 0.6s ease-in-out infinite 0.1s;
+}
+
+.mascot-yellow.celebrate-pop {
+  animation: celebrate-cheer-yellow 0.6s ease-in-out infinite 0.2s;
+}
+
+.mascot-orange.celebrate-pop {
+  animation: celebrate-cheer-orange 0.6s ease-in-out infinite 0.15s;
 }
 
 </style>
