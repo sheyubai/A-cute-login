@@ -40,10 +40,10 @@ const handleLogin = () => {
   // Simulate API call
   setTimeout(() => {
     loginState.value = LoginState.SUCCESS;
-    // Reset after animation
+    // Reset after animation - 延长到 5 秒确保彩纸飘完
     setTimeout(() => {
       loginState.value = LoginState.IDLE;
-    }, 3000);
+    }, 5000);
   }, 1500);
 };
 </script>

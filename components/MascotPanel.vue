@@ -2,8 +2,9 @@
   <div ref="containerRef" class="w-full h-full flex items-center justify-center relative bg-[#f3f4f6]">
     <svg 
       :viewBox="'0 0 420 340'" 
-      :class="`w-full h-full max-h-[400px] transition-transform duration-500 ${isCelebrating ? 'scale-105' : ''}`"
+      class="w-full h-full max-h-[400px]"
       preserveAspectRatio="xMidYMid meet"
+      style="will-change: transform; backface-visibility: hidden; transform: translateZ(0);"
     >
       <defs>
         <clipPath id="purple-clip">
@@ -15,13 +16,26 @@
         <clipPath id="orange-clip">
           <path d="M 0 130 A 130 130 0 0 1 260 130 Z" />
         </clipPath>
+        
+        <!-- 淡淡的影子渐变 - 让人物看起来站在平面上 -->
+        <radialGradient id="shadow-gradient" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#000000" stop-opacity="0.05" />
+          <stop offset="50%" stop-color="#000000" stop-opacity="0.03" />
+          <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+        </radialGradient>
       </defs>
 
-      <!-- SHADOW BASE -->
-      <ellipse cx="210" cy="290" rx="190" ry="15" fill="#E5E7EB" />
+      <!-- 淡淡的阴影 - 贴在人物下面 -->
+      <g opacity="1">
+        <!-- 主阴影 - 贴近人物底部，淡淡的效果 -->
+        <ellipse cx="210" cy="285" rx="170" ry="6" fill="url(#shadow-gradient)" />
+        
+        <!-- 内层阴影 - 更贴近人物底部 -->
+        <ellipse cx="210" cy="283" rx="130" ry="4" fill="#000000" opacity="0.04" />
+      </g>
 
       <!-- --- 1. PURPLE BLOCK (Tall, Back Left) --- -->
-      <g :transform="`translate(70, 30) ${isCelebrating ? 'translate(0, -30)' : ''}`" class="transition-transform duration-500">
+      <g class="mascot-purple" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <g clip-path="url(#purple-clip)">
           <!-- Main Body -->
           <rect x="0" y="0" width="120" height="240" fill="#8B5CF6" />
@@ -70,7 +84,7 @@
       </g>
 
       <!-- --- 2. BLACK BLOCK (Middle, Raised) --- -->
-      <g :transform="`translate(160, 80) ${isCelebrating ? 'translate(0, -20)' : ''}`" class="transition-transform duration-500 delay-75">
+      <g class="mascot-black" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <rect x="0" y="0" width="100" height="150" rx="12" fill="#1F2937" />
         
         <g class="transition-opacity duration-300">
@@ -90,7 +104,7 @@
       </g>
 
       <!-- --- 3. YELLOW CYLINDER (Right) --- -->
-      <g :transform="`translate(250, 130) ${isCelebrating ? 'translate(0, -25)' : ''}`" class="transition-transform duration-500 delay-100">
+      <g class="mascot-yellow" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <g clip-path="url(#yellow-clip)">
           <path d="M 0 65 A 65 65 0 0 1 130 65 V 150 H 0 Z" fill="#FBBF24" />
           
@@ -109,8 +123,10 @@
               stroke="#B45309" stroke-width="3"
               :style="{ 
                 transformOrigin: '40px 150px',
-                transform: isShy ? 'translateY(-75px) rotate(15deg)' : 'translateY(0px) rotate(0deg)',
-                transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                transform: isShy ? 'translateY(-75px) rotate(15deg)' : 'translateY(90px) rotate(0deg)',
+                opacity: isShy ? 1 : 0,
+                pointerEvents: isShy ? 'auto' : 'none',
+                transition: 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease-out'
               }"
             />
             <!-- Right Arm: Pivot bottom, tilt left (inward) -->
@@ -119,8 +135,10 @@
               stroke="#B45309" stroke-width="3"
               :style="{ 
                 transformOrigin: '90px 150px',
-                transform: isShy ? 'translateY(-80px) rotate(-15deg)' : 'translateY(0px) rotate(0deg)',
-                transition: 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                transform: isShy ? 'translateY(-80px) rotate(-15deg)' : 'translateY(95px) rotate(0deg)',
+                opacity: isShy ? 1 : 0,
+                pointerEvents: isShy ? 'auto' : 'none',
+                transition: 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease-out'
               }"
             />
           </g>
@@ -128,7 +146,7 @@
       </g>
 
       <!-- --- 4. ORANGE SEMICIRCLE (Front Center) --- -->
-      <g :transform="`translate(20, 150) ${isCelebrating ? 'translate(0, -15)' : ''}`" class="transition-transform duration-500 delay-150">
+      <g class="mascot-orange" style="backface-visibility: hidden; transform-style: preserve-3d;">
         <g clip-path="url(#orange-clip)">
           <!-- Main Body -->
           <path d="M 0 130 A 130 130 0 0 1 260 130 Z" fill="#F97316" />
@@ -148,8 +166,10 @@
               stroke="#C2410C" stroke-width="3"
               :style="{ 
                 transformOrigin: '100px 130px',
-                transform: isShy ? 'translateY(-65px) rotate(15deg)' : 'translateY(0px) rotate(0deg)', 
-                transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' 
+                transform: isShy ? 'translateY(-65px) rotate(15deg)' : 'translateY(80px) rotate(0deg)', 
+                opacity: isShy ? 1 : 0,
+                pointerEvents: isShy ? 'auto' : 'none',
+                transition: 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease-out'
               }"
             />
 
@@ -159,8 +179,10 @@
               stroke="#C2410C" stroke-width="3"
               :style="{ 
                 transformOrigin: '160px 130px',
-                transform: isShy ? 'translateY(-65px) rotate(-15deg)' : 'translateY(0px) rotate(0deg)', 
-                transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' 
+                transform: isShy ? 'translateY(-65px) rotate(-15deg)' : 'translateY(80px) rotate(0deg)', 
+                opacity: isShy ? 1 : 0,
+                pointerEvents: isShy ? 'auto' : 'none',
+                transition: 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease-out'
               }"
             />
           </g>
@@ -310,5 +332,27 @@ onUnmounted(() => {
 .eye-transition {
   transition: transform 0.1s linear, height 0.3s ease, cy 0.3s ease;
 }
+
+/* 初始位置 - 使用 CSS 而不是 SVG transform */
+.mascot-purple {
+  transform: translate3d(70px, 30px, 0);
+  will-change: transform;
+}
+
+.mascot-black {
+  transform: translate3d(160px, 80px, 0);
+  will-change: transform;
+}
+
+.mascot-yellow {
+  transform: translate3d(250px, 130px, 0);
+  will-change: transform;
+}
+
+.mascot-orange {
+  transform: translate3d(20px, 150px, 0);
+  will-change: transform;
+}
+
 </style>
 
